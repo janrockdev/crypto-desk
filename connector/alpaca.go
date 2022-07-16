@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
 	"sync"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v2/marketdata/stream"
@@ -23,9 +24,9 @@ type result struct {
 }
 
 func init() {
-	apiKey = "PKJH1OV6YQVY7DIHWKAM"
-	apiSecret = "T9NgVI4I0KVN5ByxSkicFi3FZ8aKHr7LLFt3hpMy"
-	baseURL = "https://paper-api.alpaca.markets"
+	baseURL = os.Getenv("ALPACAAPI")
+	apiKey = os.Getenv("ALPACAKEY")
+	apiSecret = os.Getenv("ALPACASEC")
 }
 
 func percentageChange(old, new float64) (delta float64) {
