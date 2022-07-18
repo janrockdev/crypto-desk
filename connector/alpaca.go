@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"sync"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v2/marketdata/stream"
@@ -57,10 +58,27 @@ func startAlpaca() {
 			} else {
 				mark = fmt.Sprintf("\033[1;32m%s\033[0m", "▲")
 			}
+
+			s := fmt.Sprintf("%.2f", ct.Size)
+
 			if ct.TakerSide == "B" {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma + ct.Size}
+				if ct.Size > 0.5 {
+					cmd := exec.Command("say", "-v", "Susan", "buy", s)
+					common.Logr.Info("BUY " + s)
+					if err := cmd.Run(); err != nil {
+						common.Logr.Fatal(err)
+					}
+				}
 			} else {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma - ct.Size}
+				if ct.Size > 0.5 {
+					cmd := exec.Command("say", "-v", "Susan", "sell", s)
+					common.Logr.Info("SELL " + s)
+					if err := cmd.Run(); err != nil {
+						common.Logr.Fatal(err)
+					}
+				}
 			}
 			price := fmt.Sprintf("%.2f", res.price)
 			suma := fmt.Sprintf("%.8f", res.suma)
