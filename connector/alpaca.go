@@ -31,9 +31,7 @@ func init() {
 }
 
 func percentageChange(old, new float64) (delta float64) {
-	diff := float64(new - old)
-	delta = (diff / float64(old)) * 100
-	return
+	return ((new - old) / old) * 100
 }
 
 func startAlpaca() {
@@ -63,7 +61,7 @@ func startAlpaca() {
 
 			if ct.TakerSide == "B" {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma + ct.Size}
-				if ct.Size > 0.5 {
+				if ct.Size > 1 {
 					cmd := exec.Command("say", "-v", "Susan", "buy", s)
 					common.Logr.Info("BUY " + s)
 					if err := cmd.Run(); err != nil {
@@ -72,7 +70,7 @@ func startAlpaca() {
 				}
 			} else {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma - ct.Size}
-				if ct.Size > 0.5 {
+				if ct.Size > 1 {
 					cmd := exec.Command("say", "-v", "Susan", "sell", s)
 					common.Logr.Info("SELL " + s)
 					if err := cmd.Run(); err != nil {
@@ -80,6 +78,7 @@ func startAlpaca() {
 					}
 				}
 			}
+
 			price := fmt.Sprintf("%.2f", res.price)
 			suma := fmt.Sprintf("%.8f", res.suma)
 			prc := fmt.Sprintf("%0.2f", percentageChange(start, ct.Price))
