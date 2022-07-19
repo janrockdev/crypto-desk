@@ -1,7 +1,7 @@
 package indicators
 
 import (
-	"ligs-project-go/indicators/utils"
+	"github.com/janrockdev/crypto-desk/indicators/utils"
 )
 
 //Indicator : Interface for all indicators

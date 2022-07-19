@@ -3,7 +3,7 @@ package indicators
 import (
 	"math"
 
-	"ligs-project-go/indicators/utils"
+	"github.com/janrockdev/crypto-desk/indicators/utils"
 )
 
 //Aroon
@@ -11,7 +11,7 @@ import (
 //The Aroon Indicator (often referred to as Aroon Up Down) is a range bound, technical indicator that is actually a set
 //of two separate measurements designed to measure how many periods have passed since price has recorded an n-period high
 //or low low with “n” being a number of periods set at the trader’s discretion. For example a 14 Day Aroon-Up will take
-//the number of days since price last recorded a 14 day high and then calculate a number between 0 and 100. 
+//the number of days since price last recorded a 14 day high and then calculate a number between 0 and 100.
 type aroon struct {
 	period    uint
 	prev      float64

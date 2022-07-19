@@ -3,7 +3,7 @@ package indicators
 import (
 	"math"
 
-	"ligs-project-go/indicators/utils"
+	"github.com/janrockdev/crypto-desk/indicators/utils"
 )
 
 //Percentage Price Oscillator
