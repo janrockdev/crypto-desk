@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"sync"
@@ -34,6 +35,31 @@ func percentageChange(old, new float64) (delta float64) {
 	return ((new - old) / old) * 100
 }
 
+func makeSound(size float64, side string) {
+	i := math.Round(size + 1)
+	level := fmt.Sprintf("set Volume %v", i)
+	//cmd := exec.Command("say", "-v", "Susan", "buy", s)
+	if side == "B" {
+		cmd := exec.Command("osascript", "-e", level)
+		if err := cmd.Run(); err != nil {
+			common.Logr.Fatal(err)
+		}
+		cmd = exec.Command("afplay", "/System/Library/Sounds/Funk.aiff")
+		if err := cmd.Run(); err != nil {
+			common.Logr.Fatal(err)
+		}
+	} else {
+		cmd := exec.Command("osascript", "-e", level)
+		if err := cmd.Run(); err != nil {
+			common.Logr.Fatal(err)
+		}
+		cmd = exec.Command("afplay", "/System/Library/Sounds/Ping.aiff")
+		if err := cmd.Run(); err != nil {
+			common.Logr.Fatal(err)
+		}
+	}
+}
+
 func startAlpaca() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -57,25 +83,15 @@ func startAlpaca() {
 				mark = fmt.Sprintf("\033[1;32m%s\033[0m", "▲")
 			}
 
-			s := fmt.Sprintf("%.2f", ct.Size)
-
 			if ct.TakerSide == "B" {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma + ct.Size}
-				if ct.Size > 1 {
-					cmd := exec.Command("say", "-v", "Susan", "buy", s)
-					common.Logr.Info("BUY " + s)
-					if err := cmd.Run(); err != nil {
-						common.Logr.Fatal(err)
-					}
+				if ct.Size >= 0.1 {
+					go makeSound(ct.Size, "B")
 				}
 			} else {
 				res = result{ct.Timestamp.String(), ct.Price, mark, res.suma - ct.Size}
-				if ct.Size > 1 {
-					cmd := exec.Command("say", "-v", "Susan", "sell", s)
-					common.Logr.Info("SELL " + s)
-					if err := cmd.Run(); err != nil {
-						common.Logr.Fatal(err)
-					}
+				if ct.Size >= 0.1 {
+					go makeSound(ct.Size, "S")
 				}
 			}
 
