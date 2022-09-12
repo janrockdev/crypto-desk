@@ -1,4 +1,4 @@
-# Crypto-Desk
+# Crypto-Desk (Golang/KDB+)
 
 ### Description:
 Crypto strategies for various crypto exchanges in Golang.
